@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Syourai × Grand Suite | Japan Workforce Partnership Proposal</title>
+<style>
+  :root{
+    --navy:#0b2038;
+    --navy-2:#123a5b;
+    --blue:#2f78a7;
+    --red:#d82f3d;
+    --paper:#f5f2ec;
+    --white:#ffffff;
+    --ink:#13283b;
+    --muted:#677787;
+    --line:#d8e0e6;
+    --soft-blue:#eaf2f7;
+    --soft-red:#fbeaec;
+    --soft-green:#edf5f1;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;background:#09131f;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",Arial,sans-serif;color:var(--ink);overflow:hidden}
+  button{font:inherit}
+  .deck{width:100%;height:100%;display:grid;place-items:center;position:relative}
+  .slide{
+    position:absolute;width:1600px;height:900px;overflow:hidden;background:var(--paper);
+    opacity:0;transform:translateX(70px) scale(.985);pointer-events:none;
+    transition:opacity .32s ease,transform .42s cubic-bezier(.22,.8,.22,1);
+    box-shadow:0 30px 80px rgba(0,0,0,.28);
+  }
+  .slide.active{opacity:1;transform:translateX(0) scale(1);pointer-events:auto}
+  .slide.prev{transform:translateX(-70px) scale(.985)}
+  .slide::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--red) 0 20%,#e7ebef 20% 74%,var(--blue) 74%)}
+  .topline{position:absolute;left:70px;right:70px;top:42px;display:flex;align-items:center;justify-content:space-between;z-index:8}
+  .brandrow{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:800;letter-spacing:.01em}
+  .brandmark{width:34px;height:34px;border:2px solid var(--navy);border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:900;background:#fff}
+  .brandmark.red{border-color:var(--red);color:var(--red)}
+  .times{color:#9aa6b0;font-size:16px}
+  .pagenum{font-size:12px;font-weight:850;letter-spacing:.14em;color:#84909a;text-transform:uppercase}
+  .eyebrow{font-size:14px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:11px}
+  .eyebrow::before{content:"";width:34px;height:3px;border-radius:3px;background:var(--red)}
+  h1,h2,h3,p{margin:0}
+  h2{font-size:52px;line-height:1.03;letter-spacing:-.04em;color:var(--navy);font-weight:900}
+  .jp-sub{font-size:23px;color:#526474;font-weight:750;margin-top:10px}
+  .lede{font-size:19px;line-height:1.55;color:#536677}
+  .mono{font-variant-numeric:tabular-nums}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #d7e0e6;border-radius:999px;background:rgba(255,255,255,.74);font-size:12px;font-weight:800;color:#536678}
+  .mini-icon{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--soft-blue);color:var(--blue);font-size:12px;font-weight:900}
+
+  /* controls */
+  .controls{position:fixed;z-index:80;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:999px;background:rgba(10,24,39,.88);backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .navbtn{width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.10);color:#fff;cursor:pointer;font-size:19px}
+  .dots{display:flex;gap:6px;padding:0 4px}.dot{width:7px;height:7px;border:0;border-radius:50%;background:rgba(255,255,255,.28);cursor:pointer;padding:0}.dot.active{width:22px;border-radius:20px;background:#fff}
+  .hint{position:fixed;right:18px;bottom:22px;color:rgba(255,255,255,.62);font-size:11px;z-index:80}
+
+  /* slide 1 */
+  .s1{background:linear-gradient(135deg,#fff 0%,#f7f9fb 66%,#edf3f6 100%)}
+  .s1 .copy{position:absolute;left:88px;top:175px;width:860px;z-index:3}
+  .s1 h1{font-size:72px;line-height:.99;letter-spacing:-.05em;color:var(--navy);font-weight:920;max-width:850px}
+  .s1 h1 .jp{display:block;color:var(--blue);font-size:38px;line-height:1.15;letter-spacing:-.015em;margin-top:18px;font-weight:820}
+  .s1 .lede{margin-top:26px;max-width:790px;font-size:21px}
+  .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;max-width:840px}
+  .hero-graphic{position:absolute;right:62px;top:132px;width:520px;height:600px}
+  .sun{position:absolute;right:58px;top:0;width:250px;height:250px;border-radius:50%;background:var(--red);box-shadow:0 18px 65px rgba(216,47,61,.20)}
+  .hero-card{position:absolute;right:0;top:176px;width:472px;height:325px;border-radius:28px;background:rgba(255,255,255,.88);border:1px solid #d4dce3;box-shadow:0 24px 55px rgba(20,50,72,.11);padding:34px;backdrop-filter:blur(7px)}
+  .hero-card .kicker{font-size:13px;font-weight:900;color:var(--red);letter-spacing:.13em;text-transform:uppercase}
+  .routeword{font-size:52px;font-weight:950;letter-spacing:-.04em;margin-top:18px;color:var(--navy)}
+  .kanji{font-size:34px;font-weight:900;color:var(--blue);margin-top:5px}
+  .bridge-svg{position:absolute;left:30px;right:30px;bottom:26px;height:96px}
+  .s1 .footerband{position:absolute;left:0;right:0;bottom:0;height:124px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 88px}
+  .s1 .footerband b{font-size:21px}.s1 .footerband span{display:block;color:#b6c7d5;font-size:14px;margin-top:6px}
+
+  /* slide 2 */
+  .section-head{position:absolute;left:82px;top:122px;width:1090px}
+  .section-head .eyebrow{margin-bottom:15px}.section-head .lede{margin-top:14px;max-width:1020px}
+  .partnership-grid{position:absolute;left:82px;right:82px;top:320px;height:455px;display:grid;grid-template-columns:1fr 132px 1fr;gap:20px}
+  .org-card{background:#fff;border:1px solid #d7e0e6;border-radius:24px;padding:26px 28px;box-shadow:0 16px 38px rgba(18,52,77,.06)}
+  .org-head{display:flex;align-items:center;gap:14px;margin-bottom:17px}.org-head .logo{width:52px;height:52px;border-radius:15px;background:var(--soft-red);color:var(--red);border:1px solid #f0ccd1;display:grid;place-items:center;font-weight:950}.org-card.grand .logo{background:var(--soft-blue);color:var(--blue);border-color:#d4e4ed}
+  .org-name{font-size:22px;font-weight:900;color:var(--navy)}.org-role{font-size:12px;color:#7a8793;font-weight:850;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+  .service{display:grid;grid-template-columns:22px 1fr;gap:10px;margin:12px 0}.service .tick{width:20px;height:20px;border-radius:50%;background:var(--soft-red);color:var(--red);display:grid;place-items:center;font-size:11px;font-weight:900}.grand .service .tick{background:var(--soft-blue);color:var(--blue)}
+  .service b{font-size:14px;color:#1c3448}.service p{font-size:12px;line-height:1.35;color:#667888;margin-top:2px}
+  .middlelink{display:flex;align-items:center;justify-content:center;position:relative}.middlelink::before{content:"";position:absolute;top:20px;bottom:20px;width:2px;background:linear-gradient(var(--red),#ccd7df,var(--blue))}.joint{position:relative;width:106px;height:106px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;text-align:center;font-size:14px;line-height:1.15;font-weight:900;box-shadow:0 15px 35px rgba(11,32,56,.18)}
+  .bottom-flow{position:absolute;left:82px;right:82px;bottom:54px;height:78px;border-radius:20px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 24px;gap:11px}.flow-title{width:260px;font-size:15px;font-weight:850}.flow-title span{display:block;color:#aebfd0;font-size:11px;margin-top:3px}.flow-step{padding:9px 12px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:11px;font-size:11px;font-weight:800;text-align:center;white-space:nowrap}.arrow{color:#81a0b8;font-size:16px}
+
+  /* slide 3 */
+  .challenge-wrap{position:absolute;left:82px;right:82px;top:305px;bottom:76px;display:grid;grid-template-columns:540px 1fr;gap:32px}
+  .challenge-panel{background:var(--navy);border-radius:26px;padding:30px;color:#fff;position:relative;overflow:hidden}.challenge-panel::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-110px;bottom:-120px;background:rgba(255,255,255,.05)}
+  .challenge-panel h3{font-size:25px;margin-bottom:10px}.challenge-panel .jp{font-size:14px;color:#b4c6d5;font-weight:700}.pain{display:flex;gap:12px;margin-top:20px;align-items:flex-start}.pain .n{width:34px;height:34px;border-radius:10px;background:rgba(216,47,61,.18);color:#ff919b;display:grid;place-items:center;font-weight:900;flex:none}.pain b{display:block;font-size:14px}.pain span{display:block;color:#b8c8d6;font-size:12px;line-height:1.4;margin-top:3px}
+  .solution-panel{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.solution-card{background:#fff;border:1px solid #d8e0e6;border-radius:21px;padding:22px;box-shadow:0 13px 30px rgba(17,49,70,.05)}.solution-card .ico{width:44px;height:44px;border-radius:13px;background:var(--soft-blue);color:var(--blue);display:grid;place-items:center;font-weight:950;font-size:17px;margin-bottom:15px}.solution-card:nth-child(2n) .ico{background:var(--soft-red);color:var(--red)}.solution-card b{font-size:16px;color:var(--navy)}.solution-card p{font-size:12px;line-height:1.5;color:#647585;margin-top:7px}
+
+  /* slide 4 */
+  .pipeline{position:absolute;left:70px;right:70px;top:314px;height:425px}
+  .pipeline-line{position:absolute;left:55px;right:55px;top:136px;height:4px;background:linear-gradient(90deg,var(--red),#86a7bc,var(--blue));border-radius:4px}
+  .stage-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;position:relative;z-index:2}
+  .stage{text-align:center}.node{width:76px;height:76px;border-radius:22px;margin:95px auto 18px;background:#fff;border:1px solid #d7e0e6;display:grid;place-items:center;box-shadow:0 12px 28px rgba(20,52,74,.08);font-weight:950;color:var(--blue);font-size:21px}.stage:first-child .node,.stage:nth-child(2) .node{color:var(--red)}.stage h3{font-size:15px;color:var(--navy);line-height:1.25}.stage .jp{font-size:12px;color:#71808e;font-weight:750;margin-top:4px}.stage p{font-size:11px;line-height:1.45;color:#73818d;margin:9px auto 0;max-width:180px}
+  .pipeline-note{position:absolute;left:50%;transform:translateX(-50%);bottom:0;background:#fff;border:1px solid #d7e0e6;border-radius:17px;padding:14px 20px;font-size:12px;color:#586b7a;font-weight:700;box-shadow:0 10px 24px rgba(20,50,70,.04)}
+
+  /* slide 5 */
+  .readiness{position:absolute;left:82px;right:82px;top:305px;bottom:70px;display:grid;grid-template-columns:600px 1fr;gap:34px;align-items:center}
+  .rings{width:520px;height:520px;position:relative;margin:auto}.ring{position:absolute;border-radius:50%;border:1px solid #cdd8df;display:grid;place-items:center}.ring.r1{inset:15px;background:rgba(47,120,167,.03)}.ring.r2{inset:75px;background:rgba(216,47,61,.025)}.ring.r3{inset:140px;background:#fff;box-shadow:0 15px 35px rgba(18,49,72,.07)}.core{font-size:22px;font-weight:900;text-align:center;color:var(--navy);line-height:1.2}.orbit-label{position:absolute;padding:9px 13px;border-radius:12px;background:#fff;border:1px solid #d8e1e6;font-size:12px;font-weight:850;box-shadow:0 8px 20px rgba(18,47,69,.05)}.o1{top:8px;left:178px}.o2{right:0;top:176px}.o3{right:34px;bottom:80px}.o4{left:28px;bottom:78px}.o5{left:0;top:177px}
+  .metric-list{display:grid;gap:14px}.metric{background:#fff;border:1px solid #d8e1e6;border-radius:18px;padding:18px 20px;display:grid;grid-template-columns:48px 1fr 110px;align-items:center;gap:14px}.metric .icon{width:44px;height:44px;border-radius:13px;background:var(--soft-blue);color:var(--blue);display:grid;place-items:center;font-weight:950}.metric:nth-child(even) .icon{background:var(--soft-red);color:var(--red)}.metric b{font-size:15px}.metric p{font-size:11px;line-height:1.4;color:#71808d;margin-top:4px}.bar{height:7px;background:#e8edf1;border-radius:8px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--red));border-radius:8px}.metric small{font-size:10px;color:#7c8993;font-weight:800;display:block;text-align:right;margin-top:5px}
+
+  /* slide 6 */
+  .sector-layout{position:absolute;left:82px;right:82px;top:305px;bottom:70px;display:grid;grid-template-columns:1fr 440px;gap:30px}
+  .sector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.sector{background:#fff;border:1px solid #d7e0e6;border-radius:18px;padding:20px;min-height:150px}.sector .sym{width:42px;height:42px;border-radius:12px;background:var(--soft-blue);color:var(--blue);display:grid;place-items:center;font-weight:950;font-size:16px;margin-bottom:14px}.sector:nth-child(3n+1) .sym{background:var(--soft-red);color:var(--red)}.sector b{font-size:14px;color:var(--navy)}.sector p{font-size:11px;color:#6d7d8a;margin-top:5px;line-height:1.35}.stat-panel{background:var(--navy);color:#fff;border-radius:25px;padding:28px;position:relative;overflow:hidden}.stat-panel::before{content:"";position:absolute;right:-80px;top:-70px;width:230px;height:230px;border-radius:50%;background:rgba(216,47,61,.15)}.stat-kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9eb4c5;font-weight:850}.bigstat{font-size:74px;font-weight:950;letter-spacing:-.06em;margin-top:20px}.bigstat span{font-size:24px;color:#b6c8d6;margin-left:5px}.stat-panel h3{font-size:19px;margin-top:4px}.stat-panel p{font-size:12px;line-height:1.55;color:#b9c9d5;margin-top:11px}.timeline{margin-top:24px;display:grid;gap:12px}.trow{display:grid;grid-template-columns:70px 1fr;gap:10px;font-size:11px}.trow b{color:#fff}.trow span{color:#9fb3c3}
+
+  /* slide 7 */
+  .ethics-layout{position:absolute;left:82px;right:82px;top:300px;bottom:65px;display:grid;grid-template-columns:530px 1fr;gap:35px}.shield-card{background:var(--navy);border-radius:26px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;color:#fff}.shield-card::before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;background:rgba(255,255,255,.04)}.shield{width:260px;height:300px;clip-path:polygon(50% 0,94% 15%,88% 68%,50% 100%,12% 68%,6% 15%);background:linear-gradient(160deg,#214c6b,#102a43);display:grid;place-items:center;text-align:center;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.25)}.shield::after{content:"";position:absolute;inset:14px;clip-path:inherit;border:1px solid rgba(255,255,255,.18)}.shield strong{font-size:30px;line-height:1.05}.shield span{display:block;font-size:13px;color:#b8cbd8;margin-top:10px}.ethic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.ethic{background:#fff;border:1px solid #d7e0e6;border-radius:19px;padding:21px}.ethic .num{font-size:12px;color:var(--red);font-weight:950;letter-spacing:.12em}.ethic b{display:block;font-size:15px;color:var(--navy);margin-top:8px}.ethic p{font-size:11px;line-height:1.45;color:#71808c;margin-top:6px}
+
+  /* slide 8 */
+  .value-layout{position:absolute;left:82px;right:82px;top:290px;bottom:78px;display:grid;grid-template-columns:1fr 500px;gap:28px}.value-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.value{background:#fff;border:1px solid #d7e0e6;border-radius:20px;padding:22px}.value .vicon{width:42px;height:42px;border-radius:12px;background:var(--soft-blue);color:var(--blue);display:grid;place-items:center;font-weight:950;margin-bottom:14px}.value:nth-child(even) .vicon{background:var(--soft-red);color:var(--red)}.value b{font-size:15px;color:var(--navy)}.value p{font-size:11px;line-height:1.5;color:#6f7f8b;margin-top:6px}.cta{background:linear-gradient(150deg,#102a43,#0b2038);border-radius:27px;color:#fff;padding:33px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.cta::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-120px;bottom:-120px;background:rgba(216,47,61,.18)}.cta .k{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#a5bac9;font-weight:850}.cta h3{font-size:31px;line-height:1.1;margin-top:17px;max-width:380px}.cta .jp{font-size:18px;color:#c2d1dc;font-weight:700;margin-top:10px;line-height:1.35}.cta p{font-size:12px;line-height:1.55;color:#adbfcc;margin-top:20px;max-width:390px}.cta .next{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:850;position:relative;z-index:2}.cta .next i{width:36px;height:36px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-style:normal;font-size:17px}
+
+  @media(max-aspect-ratio:16/9){.slide{transform:scale(calc(100vw / 1600))}.slide.active{transform:scale(calc(100vw / 1600))}.slide.prev{transform:translateX(-70px) scale(calc(100vw / 1600))}}
+  @media(min-aspect-ratio:16/9){.slide{transform:scale(calc(100vh / 900))}.slide.active{transform:scale(calc(100vh / 900))}.slide.prev{transform:translateX(-70px) scale(calc(100vh / 900))}}
+  @media print{html,body{overflow:visible;background:#fff}.deck{display:block}.slide{position:relative;opacity:1!important;transform:none!important;page-break-after:always;box-shadow:none}.controls,.hint{display:none}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 01 COVER -->
+  <section class="slide s1 active">
+    <div class="topline">
+      <div class="brandrow"><span class="brandmark red">S</span>Syourai International Education <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job Pvt. Ltd.</div>
+      <div class="pagenum">01 / Japan Employer Proposal / 日本企業向け提案書</div>
+    </div>
+    <div class="copy">
+      <div class="eyebrow" style="margin-bottom:22px">Nepal–Japan Workforce Partnership / ネパール・日本 人材パートナーシップ</div>
+      <h1>Japan Workforce<br>Partnership Proposal<span class="jp">日本企業向け人材パートナーシップ提案書</span></h1>
+      <p class="lede">A coordinated recruitment and workforce-preparation solution for Japanese employers / 日本企業のための、人材募集・育成・送り出し・定着支援を一貫して行う人材ソリューション。</p>
+      <div class="pillrow">
+        <span class="chip">Recruitment / 人材募集</span><span class="chip">Japanese / 日本語教育</span><span class="chip">Skills / 技能研修</span><span class="chip">Documents / 書類手続き</span><span class="chip">Deployment / 送り出し</span><span class="chip">Support / 入国後支援</span>
+      </div>
+    </div>
+    <div class="hero-graphic">
+      <div class="sun"></div>
+      <div class="hero-card">
+        <div class="kicker">Built for Japanese Employers / 日本企業のために</div>
+        <div class="routeword">NEPAL → JAPAN</div>
+        <div class="kanji">人材連携 / Workforce Partnership</div>
+        <svg class="bridge-svg" viewBox="0 0 400 100" aria-hidden="true"><path d="M30 78h340" stroke="#d6e0e7" stroke-width="3"/><path d="M65 78V54M335 78V54" stroke="#2f78a7" stroke-width="11" stroke-linecap="round"/><path d="M70 60C138 8 262 8 330 60" fill="none" stroke="#2f78a7" stroke-width="11" stroke-linecap="round"/><circle cx="200" cy="22" r="8" fill="#d82f3d"/></svg>
+      </div>
+    </div>
+    <div class="footerband"><div><b>Nepal Recruitment. Japan Readiness. Long-Term Support.</b><span>ネパールでの人材募集から、日本での就業・定着支援まで。</span></div><div style="text-align:right;color:#b7c8d5;font-size:12px">SYOURAI INTERNATIONAL EDUCATION × GRAND SUITE JOB PVT. LTD.</div></div>
+  </section>
+
+  <!-- 02 PARTNERSHIP -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">02 / Partnership Overview / パートナーシップ概要</div></div>
+    <div class="section-head"><div class="eyebrow">One Coordinated Nepal–Japan System / 一貫したネパール・日本連携</div><h2>Two organizations. <span style="color:var(--blue)">One workforce solution.</span></h2><div class="jp-sub">2社の強みを結集した、ワンストップ人材ソリューション。</div><p class="lede">Japan-focused coordination and candidate readiness combined with recruitment, processing, deployment and post-placement support / 日本側との連携・人材育成から、人材募集、各種手続き、送り出し、就業後支援までを一貫して提供。</p></div>
+    <div class="partnership-grid">
+      <div class="org-card">
+        <div class="org-head"><div class="logo">S</div><div><div class="org-name">Syourai International Education</div><div class="org-role">Japan Coordination & Readiness / 日本側連携・人材育成</div></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Employer Communication / 日本企業との連絡調整</b><p>Requirements, expectations and ongoing Japan-side communication / 企業ニーズと継続的な連携を整理。</p></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Japanese Preparation / 日本語教育</b><p>Workplace and daily-life communication readiness / 職場・日常生活に必要な日本語力を育成。</p></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Cultural Readiness / 日本文化・職場理解</b><p>Manners, work discipline and adaptation / マナー・職場規律・生活適応を支援。</p></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Relationship Support / 継続的な関係構築</b><p>Long-term Nepal–Japan communication bridge / ネパールと日本をつなぐ継続窓口。</p></div></div>
+      </div>
+      <div class="middlelink"><div class="joint">NEPAL<br>↔<br>JAPAN<br><small>一貫連携</small></div></div>
+      <div class="org-card grand">
+        <div class="org-head"><div class="logo">GS</div><div><div class="org-name">Grand Suite Job Pvt. Ltd.</div><div class="org-role">Recruitment & Deployment / 人材募集・手続き・送り出し</div></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Sourcing & Screening / 候補者募集・選考</b><p>Targeted recruitment based on employer requirements / 企業要件に応じた候補者の募集・絞り込み。</p></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Interview & Trade Test / 面接・技能評価</b><p>Interview coordination and practical assessment / 面接・必要に応じた実技試験を実施。</p></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Documents & Visa / 書類・ビザ手続き</b><p>Medical, employment, visa and immigration processing / 健康診断・雇用・ビザ・入国関連手続き。</p></div></div>
+        <div class="service"><div class="tick">✓</div><div><b>Deployment & Support / 送り出し・配属後支援</b><p>Departure coordination and continued follow-up / 日本への送り出しと配属後サポート。</p></div></div>
+      </div>
+    </div>
+    <div class="bottom-flow"><div class="flow-title">A single coordinated pipeline<span>一貫した人材供給体制</span></div><div class="flow-step">Requirement<br>企業ニーズ</div><div class="arrow">→</div><div class="flow-step">Recruit<br>人材募集</div><div class="arrow">→</div><div class="flow-step">Prepare<br>教育・準備</div><div class="arrow">→</div><div class="flow-step">Select<br>面接・選考</div><div class="arrow">→</div><div class="flow-step">Deploy<br>送り出し</div><div class="arrow">→</div><div class="flow-step">Support<br>継続支援</div></div>
+  </section>
+
+  <!-- 03 EMPLOYER PROBLEM -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">03 / Employer Need / 日本企業の課題</div></div>
+    <div class="section-head"><div class="eyebrow">Designed Around Employer Risk / 採用リスクを減らす設計</div><h2>Recruiting abroad is easy to start.<br><span style="color:var(--red)">Successful retention is harder.</span></h2><div class="jp-sub">海外採用は「採用」だけでなく、「準備」と「定着」までが重要です。</div></div>
+    <div class="challenge-wrap">
+      <div class="challenge-panel">
+        <h3>Common employer concerns</h3><div class="jp">日本企業が抱えやすい課題</div>
+        <div class="pain"><div class="n">01</div><div><b>Communication gaps / コミュニケーション不足</b><span>Language ability may not match real workplace needs.</span></div></div>
+        <div class="pain"><div class="n">02</div><div><b>Candidate mismatch / 人材ミスマッチ</b><span>Skills, attitude or expectations may differ from the employer’s requirements.</span></div></div>
+        <div class="pain"><div class="n">03</div><div><b>Process complexity / 手続きの複雑さ</b><span>Recruitment, documents, visa and deployment require multiple coordinated steps.</span></div></div>
+        <div class="pain"><div class="n">04</div><div><b>Post-arrival adaptation / 入国後の適応</b><span>Workers need practical support after they begin living and working in Japan.</span></div></div>
+      </div>
+      <div class="solution-panel">
+        <div class="solution-card"><div class="ico">A</div><b>Employer-first selection / 企業要件基準の選考</b><p>Start with the job, workplace and employer expectations before sourcing candidates.</p></div>
+        <div class="solution-card"><div class="ico">日</div><b>Japan readiness / 日本就業準備</b><p>Language, culture, manners and workplace expectations are built into preparation.</p></div>
+        <div class="solution-card"><div class="ico">↗</div><b>Coordinated deployment / 一貫した送り出し</b><p>Screening, interview, documentation, medical, visa and departure are connected.</p></div>
+        <div class="solution-card"><div class="ico">∞</div><b>Continuous support / 継続支援</b><p>The relationship continues beyond departure to help reduce avoidable placement friction.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 PIPELINE -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">04 / Recruitment Pipeline / 採用・送り出しフロー</div></div>
+    <div class="section-head"><div class="eyebrow">End-to-End Workforce Pipeline / 一貫した人材フロー</div><h2>From employer requirement to<br><span style="color:var(--blue)">productive employment in Japan.</span></h2><div class="jp-sub">企業ニーズの確認から、日本での就業・定着まで。</div></div>
+    <div class="pipeline"><div class="pipeline-line"></div><div class="stage-row">
+      <div class="stage"><div class="node">01</div><h3>Requirement</h3><div class="jp">企業ニーズ確認</div><p>Role, headcount, language, skill and workplace expectations.</p></div>
+      <div class="stage"><div class="node">02</div><h3>Recruit & Screen</h3><div class="jp">募集・選考</div><p>Targeted sourcing, screening and candidate shortlisting.</p></div>
+      <div class="stage"><div class="node">03</div><h3>Prepare</h3><div class="jp">教育・準備</div><p>Japanese language, culture, safety and skill readiness.</p></div>
+      <div class="stage"><div class="node">04</div><h3>Interview & Select</h3><div class="jp">面接・採用</div><p>Employer interview, practical assessment and final selection.</p></div>
+      <div class="stage"><div class="node">05</div><h3>Process & Deploy</h3><div class="jp">手続き・送り出し</div><p>Medical, documents, visa, immigration and departure coordination.</p></div>
+      <div class="stage"><div class="node">06</div><h3>Support</h3><div class="jp">配属後支援</div><p>Continued communication and practical post-placement follow-up.</p></div>
+    </div><div class="pipeline-note">Employer receives one coordinated process instead of disconnected vendors / 日本企業は複数の窓口ではなく、一貫した連携体制を利用できます。</div></div>
+  </section>
+
+  <!-- 05 READINESS -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">05 / Candidate Readiness / 人材育成</div></div>
+    <div class="section-head"><div class="eyebrow">Beyond Language Alone / 日本語だけではない人材育成</div><h2>We prepare candidates for the<br><span style="color:var(--blue)">workplace, not only the interview.</span></h2><div class="jp-sub">面接合格ではなく、日本の職場で活躍できる準備を。</div></div>
+    <div class="readiness">
+      <div class="rings"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"><div class="core">Japan<br>Ready<br><span style="font-size:15px;color:var(--blue)">日本就業準備</span></div></div><div class="orbit-label o1">Japanese / 日本語</div><div class="orbit-label o2">Skills / 技能</div><div class="orbit-label o3">Safety / 安全</div><div class="orbit-label o4">Culture / 文化</div><div class="orbit-label o5">Mindset / 就業意識</div></div>
+      <div class="metric-list">
+        <div class="metric"><div class="icon">日</div><div><b>Practical Japanese / 実践日本語</b><p>Workplace instructions, reporting and daily communication.</p></div><div><div class="bar"><span style="width:92%"></span></div><small>Core readiness area</small></div></div>
+        <div class="metric"><div class="icon">礼</div><div><b>Workplace Culture / 職場文化</b><p>Manners, punctuality, hierarchy and responsible conduct.</p></div><div><div class="bar"><span style="width:86%"></span></div><small>Integrated training</small></div></div>
+        <div class="metric"><div class="icon">技</div><div><b>Occupation Skills / 職種技能</b><p>Relevant skill preparation and practical assessment where applicable.</p></div><div><div class="bar"><span style="width:83%"></span></div><small>Role dependent</small></div></div>
+        <div class="metric"><div class="icon">安</div><div><b>Life & Safety / 生活・安全</b><p>Daily-life rules, safety awareness and pre-departure orientation.</p></div><div><div class="bar"><span style="width:88%"></span></div><small>Pre-departure focus</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 SECTORS + PROFILE FACTS -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">06 / Talent Categories / 対応職種</div></div>
+    <div class="section-head"><div class="eyebrow">Broad Workforce Capability / 多様な職種に対応</div><h2>Talent pipelines across<br><span style="color:var(--blue)">Japan-relevant sectors.</span></h2><div class="jp-sub">日本の雇用ニーズに対応する多様な人材カテゴリー。</div></div>
+    <div class="sector-layout">
+      <div class="sector-grid">
+        <div class="sector"><div class="sym">介</div><b>Caregiving / 介護</b><p>Care support and related assistance roles.</p></div>
+        <div class="sector"><div class="sym">建</div><b>Construction / 建設</b><p>Construction and related technical trades.</p></div>
+        <div class="sector"><div class="sym">製</div><b>Manufacturing / 製造</b><p>Machining, assembly, welding, finishing and factory skills.</p></div>
+        <div class="sector"><div class="sym">車</div><b>Auto Maintenance / 自動車整備</b><p>Inspection, maintenance and repair related roles.</p></div>
+        <div class="sector"><div class="sym">空</div><b>Aviation / 航空</b><p>Ground handling and aircraft maintenance related work.</p></div>
+        <div class="sector"><div class="sym">宿</div><b>Accommodation / 宿泊</b><p>Front desk, guest service and hospitality operations.</p></div>
+      </div>
+      <div class="stat-panel"><div class="stat-kicker">Grand Suite profile highlights / 会社プロフィール記載</div><div class="bigstat mono">2010<span>Established</span></div><h3>International recruitment experience / 海外人材紹介の経験</h3><p>The company profile describes overseas recruitment activity across Central Asia, Malaysia, Japan and Europe, with Japan expansion beginning in 2016.</p><div class="timeline"><div class="trow"><b>2010</b><span>Company established / 設立</span></div><div class="trow"><b>2016</b><span>Expansion into Japan / 日本へ展開</span></div><div class="trow"><b>2024</b><span>ISO 9001:2015 certification stated in profile / ISO認証をプロフィールに記載</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- 07 ETHICS -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">07 / Ethical Recruitment / 倫理的な採用</div></div>
+    <div class="section-head"><div class="eyebrow">Trust Is Part of the Process / 信頼も採用プロセスの一部</div><h2>Protect the employer.<br><span style="color:var(--red)">Respect the worker.</span></h2><div class="jp-sub">企業の安心と、候補者の権利を両立する採用方針。</div></div>
+    <div class="ethics-layout">
+      <div class="shield-card"><div class="shield"><div><strong>ETHICAL<br>RECRUITMENT</strong><span>透明性・公正性・法令遵守</span></div></div></div>
+      <div class="ethic-grid">
+        <div class="ethic"><div class="num">01 / FAIRNESS</div><b>Fair Treatment / 公正な扱い</b><p>Respectful treatment throughout recruitment and selection.</p></div>
+        <div class="ethic"><div class="num">02 / TRANSPARENCY</div><b>Clear Information / 透明性</b><p>Job details, responsibilities and compensation communicated clearly.</p></div>
+        <div class="ethic"><div class="num">03 / CONSENT</div><b>Informed Consent / 同意</b><p>Candidates understand the process and how their information is used.</p></div>
+        <div class="ethic"><div class="num">04 / PRIVACY</div><b>Confidentiality / 機密保持</b><p>Personal information is handled with appropriate care.</p></div>
+        <div class="ethic"><div class="num">05 / COMPLIANCE</div><b>Labour Law Compliance / 労働法遵守</b><p>Recruitment procedures follow relevant legal requirements.</p></div>
+        <div class="ethic"><div class="num">06 / SUPPORT</div><b>Continued Follow-up / 継続フォロー</b><p>Support does not stop at departure; communication continues after placement.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 VALUE + CTA -->
+  <section class="slide">
+    <div class="topline"><div class="brandrow"><span class="brandmark red">S</span>Syourai <span class="times">×</span><span class="brandmark">GS</span>Grand Suite Job</div><div class="pagenum">08 / Partnership Value / パートナーシップ価値</div></div>
+    <div class="section-head"><div class="eyebrow">Built for Long-Term Partnership / 長期的な人材パートナーへ</div><h2>A simpler way to build a<br><span style="color:var(--blue)">reliable Nepal workforce pipeline.</span></h2><div class="jp-sub">ネパールから日本へ、安定した人材供給体制をよりシンプルに。</div></div>
+    <div class="value-layout">
+      <div class="value-grid">
+        <div class="value"><div class="vicon">1</div><b>One Coordination Point / 一元的な連携</b><p>Reduce fragmented communication between recruitment, preparation and deployment.</p></div>
+        <div class="value"><div class="vicon">適</div><b>Employer-Specific Selection / 企業別選考</b><p>Candidate profiles are aligned to actual job and workplace requirements.</p></div>
+        <div class="value"><div class="vicon">準</div><b>Better Prepared Candidates / 就業準備</b><p>Language, culture, mindset and skills are treated as one readiness system.</p></div>
+        <div class="value"><div class="vicon">継</div><b>Support Beyond Departure / 配属後支援</b><p>Ongoing communication helps employers and workers resolve practical issues early.</p></div>
+      </div>
+      <div class="cta"><div><div class="k">Partnership Invitation / ご提案</div><h3>Let’s build your Nepal–Japan workforce pipeline.</h3><div class="jp">貴社に最適なネパール人材採用・育成・送り出し体制をご提案します。</div><p>We welcome discussions with Japanese employers, supervising organizations, registered support organizations and human-resource partners seeking a dependable Nepal recruitment channel.</p></div><div class="next"><i>→</i> Next step: requirement consultation / 次のステップ：採用ニーズのヒアリング</div></div>
+    </div>
+  </section>
+
+</div>
+<div class="controls"><button class="navbtn" id="prev" aria-label="Previous slide">‹</button><div class="dots" id="dots"></div><button class="navbtn" id="next" aria-label="Next slide">›</button></div>
+<div class="hint">← → keys · click dots · print to PDF</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dots=document.getElementById('dots');
+let current=0;
+slides.forEach((_,i)=>{const b=document.createElement('button');b.className='dot'+(i===0?' active':'');b.setAttribute('aria-label','Go to slide '+(i+1));b.onclick=()=>go(i);dots.appendChild(b)});
+function go(n){n=(n+slides.length)%slides.length;slides.forEach((s,i)=>{s.classList.remove('active','prev');if(i===n)s.classList.add('active');else if(i<n)s.classList.add('prev')});[...dots.children].forEach((d,i)=>d.classList.toggle('active',i===n));current=n}
+document.getElementById('prev').onclick=()=>go(current-1);document.getElementById('next').onclick=()=>go(current+1);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))go(current+1);if(['ArrowLeft','PageUp'].includes(e.key))go(current-1)});
+</script>
+</body>
+</html>
